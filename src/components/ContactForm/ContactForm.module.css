@@ -1,0 +1,22 @@
+.contact__form {
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.label {
+  display: block;
+  padding: 10px 0 10px 0;
+}
+
+.contacts__input {
+  display: block;
+}
+
+.button__submit {
+  cursor: pointer;
+  width: 120px;
+  margin-top: 18px;
+  border-radius: 3px;
+  background-color: rgb(224, 230, 240);
+  border: 1px solid rgb(22, 24, 82);
+}
