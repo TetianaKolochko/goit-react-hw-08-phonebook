@@ -6,7 +6,9 @@ import { nanoid } from 'nanoid';
 import './App.module.css';
 
 export default function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    JSON.parse(window.localStorage.getItem('contacts')) ?? []
+  );
   const [filter, setFilter] = useState('');
 
   const handleChange = evt => {
@@ -41,13 +43,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-    setContacts(parsedContacts);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+    window.localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   return (
