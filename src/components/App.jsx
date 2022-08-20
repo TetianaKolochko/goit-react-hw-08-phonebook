@@ -1,58 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './ContactFilter/ContactFilter';
 import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeFilter } from 'redux/filterSlice';
+import { addContact, removeContacts } from 'redux/contactsSlice';
 import './App.module.css';
 
 export default function App() {
-  const [contacts, setContacts] = useState(
-    JSON.parse(window.localStorage.getItem('contacts')) ?? []
-  );
-  const [filter, setFilter] = useState('');
+  const contactsState = useSelector(state => state.contacts.items);
+  const filterState = useSelector(state => state.filter);
 
-  const handleChange = evt => {
-    setFilter(evt.currentTarget.value);
-  };
+  const dispatch = useDispatch();
 
-  const deleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== contactId)
-    );
-  };
-
-  const addContact = ({ name, number }) => {
+  const onSubmit = ({ name, number }) => {
     const newContact = {
       id: nanoid(),
       name,
       number,
     };
 
-    const checkUser = contacts.find(
+    const checkUser = contactsState.find(
       contact => contact.name === newContact.name
     );
 
     checkUser
       ? alert(`${name} is already in the contacts`)
-      : setContacts([newContact, ...contacts]);
+      : dispatch(addContact({ id: nanoid(), name, number }));
   };
 
-  const normalizedFilter = filter.toLowerCase();
-  const getVisibleContacts = contacts.filter(contact =>
+  const handleChange = evt => {
+    dispatch(changeFilter(evt.currentTarget.value));
+  };
+
+  const deleteContact = id => {
+    dispatch(removeContacts(id));
+  };
+
+  const normalizedFilter = filterState.toLowerCase();
+  const getVisibleContacts = contactsState.filter(contact =>
     contact.name.toLowerCase().includes(normalizedFilter)
   );
-
-  useEffect(() => {
-    window.localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   return (
     <div className="container">
       <h1>Phonebook</h1>
-      <ContactForm onFormSubmit={addContact} />
+      <ContactForm onFormSubmit={onSubmit} />
 
       <h2>Contacts</h2>
-      <Filter handleChange={handleChange} filter={filter} />
+      <Filter handleChange={handleChange} />
       <ContactList
         contacts={getVisibleContacts}
         onDeleteContact={deleteContact}

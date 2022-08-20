@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const Filter = ({ handleChange, filter }) => (
+export const Filter = ({ handleChange }) => (
   <div>
     <p>Find contacts by Name</p>
-    <input onChange={handleChange} type="text" name="filter" value={filter} />
+    <input onChange={handleChange} type="text" name="filter" />
   </div>
 );
 
@@ -12,5 +12,4 @@ export default Filter;
 
 Filter.propTypes = {
   handleChange: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
 };
