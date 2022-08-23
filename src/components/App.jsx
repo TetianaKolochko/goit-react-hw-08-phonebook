@@ -3,17 +3,11 @@ import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './ContactFilter/ContactFilter';
 // import { nanoid } from 'nanoid';
-import { useDispatch, useSelector } from 'react-redux';
 
 // import { addContact, removeContacts } from 'redux/contactsSlice';
 import './App.module.css';
 
 export default function App() {
-  const contactsState = useSelector(state => state.contacts.items);
-  const filterState = useSelector(state => state.filter);
-
-  const dispatch = useDispatch();
-
   // const onSubmit = ({ name, number }) => {
   //   const newContact = {
   //     id: nanoid(),
