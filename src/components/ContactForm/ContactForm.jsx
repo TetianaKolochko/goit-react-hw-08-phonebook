@@ -2,9 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { addContact } from 'redux/contactsSlice';
-
 import css from './ContactForm.module.css';
 
 const schema = yup.object().shape({
@@ -22,13 +20,7 @@ export const ContactForm = () => {
 
   const dispatch = useDispatch();
 
-  const onSubmit = (value, { resetForm }) => {
-    onFormSubmit(value);
-    console.log(value);
-    resetForm();
-  };
-
-  const onFormSubmit = ({ name, number }) => {
+  const onSubmit = ({ name, number }, { resetForm }) => {
     const newContact = {
       id: nanoid(),
       name,
@@ -41,7 +33,7 @@ export const ContactForm = () => {
 
     checkUser
       ? alert(`${name} is already in the contacts`)
-      : dispatch(addContact({ id: nanoid(), name, number }));
+      : dispatch(addContact({ id: nanoid(), name, number })) && resetForm();
   };
 
   return (
