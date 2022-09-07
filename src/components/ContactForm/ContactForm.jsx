@@ -1,8 +1,11 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+// import { toast } from 'react-hot-toast';
 import * as yup from 'yup';
 import { nanoid } from 'nanoid';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
+import {
+  useFetchContactsQuery,
+  useCreateContactMutation,
+} from 'redux/contactsApi';
 import css from './ContactForm.module.css';
 
 const schema = yup.object().shape({
@@ -16,9 +19,8 @@ const initialValues = {
 };
 
 export const ContactForm = () => {
-  const contactsState = useSelector(state => state.contacts.items);
-
-  const dispatch = useDispatch();
+  const { data: contacts } = useFetchContactsQuery();
+  const [createContact] = useCreateContactMutation();
 
   const onSubmit = ({ name, number }, { resetForm }) => {
     const newContact = {
@@ -27,13 +29,14 @@ export const ContactForm = () => {
       number,
     };
 
-    const checkUser = contactsState.find(
+    const checkUser = contacts.find(
       contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
     );
 
     checkUser
       ? alert(`${name} is already in the contacts`)
-      : dispatch(addContact({ id: nanoid(), name, number })) && resetForm();
+      : createContact({ id: nanoid(), name, number }) && resetForm();
+    // toast.success('Ваш контакт добавлен!');
   };
 
   return (
