@@ -1,19 +1,35 @@
-import React from 'react';
+import { useEffect, lazy } from 'react';
+import { useDispatch } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
+import { Layout } from './Layout/Layout';
+// import PrivateRoute from './PrivateRoute';
+// import PublicRoute from './PublicRoute';
+import { authOperations } from '../redux/auth';
+import { useAuth } from 'hooks';
 
-import { ContactForm } from './ContactForm/ContactForm';
-import { ContactList } from './ContactList/ContactList';
-import { Filter } from './ContactFilter/ContactFilter';
-import './App.module.css';
+const HomeView = lazy(() => import('../views/HomeView'));
+const RegisterView = lazy(() => import('../views/RegisterView'));
+const LoginView = lazy(() => import('../views/LoginView'));
+const PhonebookView = lazy(() => import('../views/PhonebookView'));
 
-export default function App() {
-  return (
-    <div className="container">
-      <h1>Phonebook</h1>
-      <ContactForm />
+export const App = () => {
+  const dispatch = useDispatch();
+  const { isRefreshing } = useAuth();
 
-      <h2>Contacts</h2>
-      <Filter />
-      <ContactList />
-    </div>
+  useEffect(() => {
+    dispatch(authOperations.fetchCurrentUser());
+  }, [dispatch]);
+
+  return isRefreshing ? (
+    <h1>Refreshing user...</h1>
+  ) : (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomeView />} />
+        <Route path="/register" element={<RegisterView />} />
+        <Route path="/login" element={<LoginView />} />
+        <Route path="/phonebook" element={<PhonebookView />} />
+      </Route>
+    </Routes>
   );
-}
+};

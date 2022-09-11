@@ -1,0 +1,10 @@
+
+  .register__form {
+    width: 320;
+  }
+
+  .register__label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15;
+  }

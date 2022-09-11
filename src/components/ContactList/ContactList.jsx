@@ -1,21 +1,26 @@
 import React from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { getFilter } from 'redux/filterSlice';
+import { getContacts } from 'redux/contacts/contacts-selectors';
+import { contactsOperations } from 'redux/contacts/index';
 import css from './ContactList.module.css';
-import {
-  useFetchContactsQuery,
-  useDeleteContactMutation,
-} from 'redux/contactsApi';
-import { useSelector } from 'react-redux';
 
 export const ContactList = () => {
-  const { data: contacts } = useFetchContactsQuery();
-  const [deleteContacts] = useDeleteContactMutation();
-  const filterState = useSelector(state => state.filter);
+  const dispatch = useDispatch();
 
-  const getVisibleContacts = filterState.toLowerCase();
+  const filter = useSelector(getFilter);
+  const contacts = useSelector(getContacts);
+  const { deleteContact } = contactsOperations;
+
+  const getVisibleContacts = filter.toLowerCase();
   const newContacts = contacts?.filter(contact =>
     contact.name.toString().toLowerCase().includes(getVisibleContacts)
   );
+
+  const onDeleteContacts = id => {
+    dispatch(deleteContact(id));
+    // Notiflix.Notify.success('Сontact removed from list');
+  };
 
   return (
     <ul className="name">
@@ -26,7 +31,7 @@ export const ContactList = () => {
             <button
               className={css.delete__button}
               type="button"
-              onClick={() => deleteContacts(id)}
+              onClick={() => onDeleteContacts(id)}
             >
               Delete
             </button>

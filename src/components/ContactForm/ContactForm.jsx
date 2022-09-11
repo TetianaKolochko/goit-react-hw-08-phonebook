@@ -1,11 +1,9 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-// import { toast } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import * as yup from 'yup';
 import { nanoid } from 'nanoid';
-import {
-  useFetchContactsQuery,
-  useCreateContactMutation,
-} from 'redux/contactsApi';
+import { useSelector, useDispatch } from 'react-redux';
+
 import css from './ContactForm.module.css';
 
 const schema = yup.object().shape({
@@ -19,8 +17,8 @@ const initialValues = {
 };
 
 export const ContactForm = () => {
-  const { data: contacts } = useFetchContactsQuery();
-  const [createContact] = useCreateContactMutation();
+  const dispatch = useDispatch();
+  const contacts = useSelector();
 
   const onSubmit = ({ name, number }, { resetForm }) => {
     const newContact = {
@@ -34,9 +32,9 @@ export const ContactForm = () => {
     );
 
     checkUser
-      ? alert(`${name} is already in the contacts`)
-      : createContact({ id: nanoid(), name, number }) && resetForm();
-    // toast.success('Ваш контакт добавлен!');
+      ? toast.error('Такий контакт вже існує!')
+      : dispatch({ id: nanoid(), name, number }) && resetForm();
+    // toast.success('Ваш контакт додано успішно!');
   };
 
   return (
@@ -67,7 +65,11 @@ export const ContactForm = () => {
         />
         <ErrorMessage component="div" name="number" />
 
-        <button type="submit" className={css.button__submit}>
+        <button
+          type="submit"
+          // disabled={isLoading}
+          className={css.button__submit}
+        >
           Add contact
         </button>
       </Form>
