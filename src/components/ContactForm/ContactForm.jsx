@@ -2,8 +2,11 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-hot-toast';
 import * as yup from 'yup';
 import { nanoid } from 'nanoid';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { contactsOperations } from 'redux/contacts';
 
+import { getContacts } from 'redux/contacts/contacts-selectors';
 import css from './ContactForm.module.css';
 
 const schema = yup.object().shape({
@@ -18,7 +21,7 @@ const initialValues = {
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector();
+  const contacts = useSelector(getContacts);
 
   const onSubmit = ({ name, number }, { resetForm }) => {
     const newContact = {
@@ -33,7 +36,7 @@ export const ContactForm = () => {
 
     checkUser
       ? toast.error('Такий контакт вже існує!')
-      : dispatch({ id: nanoid(), name, number }) && resetForm();
+      : dispatch(contactsOperations.addContact(newContact)) && resetForm();
     // toast.success('Ваш контакт додано успішно!');
   };
 
@@ -65,11 +68,7 @@ export const ContactForm = () => {
         />
         <ErrorMessage component="div" name="number" />
 
-        <button
-          type="submit"
-          // disabled={isLoading}
-          className={css.button__submit}
-        >
+        <button type="submit" className={css.button__submit}>
           Add contact
         </button>
       </Form>

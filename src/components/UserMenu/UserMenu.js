@@ -1,15 +1,18 @@
-import { useDispatch } from 'react-redux';
-import { authOperations } from '../../redux/auth';
-import { useAuth } from 'hooks';
-import  css  from './UserMenu.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { authOperations, authSelectors } from '../../redux/auth';
+
+import lego from './lego.png';
+import css from './UserMenu.module.css';
 
 export default function UserMenu() {
   const dispatch = useDispatch();
-  const { user } = useAuth();
+  const name = useSelector(authSelectors.getUsername);
+  const avatar = lego;
 
   return (
     <div className={css.container}>
-      <span className={css.name}>Welcome, {user.name}</span>
+      <img src={avatar} alt="" width="32" />
+      <span className={css.name}>Welcome, {name}</span>
       <button type="button" onClick={() => dispatch(authOperations.logOut())}>
         Log out
       </button>

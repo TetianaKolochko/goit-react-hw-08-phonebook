@@ -1,7 +1,14 @@
 .nav {
   display: inline-block;
   text-decoration: none;
-  padding: 12px;
+  padding: 20px;
   font-weight: 700;
   color: #2a363b;
+}
+.link {
+  padding-right: 10px;
+  text-decoration: none;
+}
+.link :hover {
+  color: blue;
 }

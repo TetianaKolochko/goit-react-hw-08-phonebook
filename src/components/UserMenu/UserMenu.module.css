@@ -14,7 +14,13 @@
   padding: 8px 12px;
   font-weight: 500;
   background-color: transparent;
-  border: 2px solid ;
+  border: 2px solid;
   border-radius: 4px;
   cursor: pointer;
+}
+.link {
+  margin-left: 15px;
+}
+.link :hover {
+  color: blue;
 }

@@ -21,37 +21,43 @@ export default function LoginView() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // dispatch(authOperations.logIn({ email, password }));
+    dispatch(authOperations.logIn({ email, password }));
     setEmail('');
     setPassword('');
   };
 
   return (
-    <div>
-      <h1>Страница логина</h1>
+    <div className={css.login}>
+      <h1>Log in</h1>
 
       <form onSubmit={handleSubmit} autoComplete="off" className={css.form}>
         <label className={css.label}>
-          Почта
+          E-mail
           <input
             type="email"
             name="email"
             value={email}
+            placeholder="Plese, enter your e-mail"
             onChange={handleChange}
+            className={css.input}
           />
         </label>
 
         <label className={css.label}>
-          Пароль
+          Password
           <input
             type="password"
             name="password"
             value={password}
+            placeholder="Plese, enter your password"
             onChange={handleChange}
+            className={css.input}
           />
         </label>
 
-        <button type="submit">Login in</button>
+        <button type="submit" className={css.button}>
+          Login in
+        </button>
       </form>
     </div>
   );

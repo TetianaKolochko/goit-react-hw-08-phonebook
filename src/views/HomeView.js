@@ -1,10 +1,15 @@
 import css from './HomeView.module.css';
 import React from 'react';
+import contactIcon from './contactIcon.png';
 
-const HomeView = () => (
-  <div className={css.container}>
-    <h1 className={css.title}>Приветственная страница нашего сервиса </h1>
-  </div>
-);
+export default function HomeView() {
+  const contact = contactIcon;
+  return (
+    <div className={css.container}>
+      <h1 className={css.text}>Welcome to the Phonebook! </h1>
+      <img src={contact} alt="" width="42" />
+    </div>
+  );
+}
 
-export default HomeView;
+// export default HomeView;

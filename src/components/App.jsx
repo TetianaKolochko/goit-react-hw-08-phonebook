@@ -1,11 +1,13 @@
 import { useEffect, lazy } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Layout/Layout';
-// import PrivateRoute from './PrivateRoute';
-// import PublicRoute from './PublicRoute';
-import { authOperations } from '../redux/auth';
-import { useAuth } from 'hooks';
+import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
+import { authOperations, authSelectors } from '../redux/auth';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const HomeView = lazy(() => import('../views/HomeView'));
 const RegisterView = lazy(() => import('../views/RegisterView'));
@@ -14,22 +16,47 @@ const PhonebookView = lazy(() => import('../views/PhonebookView'));
 
 export const App = () => {
   const dispatch = useDispatch();
-  const { isRefreshing } = useAuth();
+
+  const isLoading = useSelector(authSelectors.getLoading);
 
   useEffect(() => {
     dispatch(authOperations.fetchCurrentUser());
   }, [dispatch]);
 
-  return isRefreshing ? (
+  return isLoading ? (
     <h1>Refreshing user...</h1>
   ) : (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomeView />} />
-        <Route path="/register" element={<RegisterView />} />
-        <Route path="/login" element={<LoginView />} />
-        <Route path="/phonebook" element={<PhonebookView />} />
-      </Route>
-    </Routes>
+    <div>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomeView />} />
+          <Route
+            path="/phonebook"
+            element={
+              <PrivateRoute>
+                <PhonebookView />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <RegisterView />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginView />
+              </PublicRoute>
+            }
+          />
+        </Route>
+      </Routes>
+      <ToastContainer />
+    </div>
   );
 };
