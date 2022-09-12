@@ -5,7 +5,6 @@ import { Layout } from './Layout/Layout';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 import { authOperations, authSelectors } from '../redux/auth';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,7 +23,7 @@ export const App = () => {
   }, [dispatch]);
 
   return isLoading ? (
-    <h1>Refreshing user...</h1>
+    <p>Loading</p>
   ) : (
     <div>
       <Routes>

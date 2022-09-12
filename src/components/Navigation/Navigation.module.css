@@ -3,11 +3,12 @@
   text-decoration: none;
   padding: 20px;
   font-weight: 700;
-  color: #2a363b;
+  color: khaki;
 }
 .link {
   padding-right: 10px;
   text-decoration: none;
+  color: khaki;
 }
 .link :hover {
   color: blue;

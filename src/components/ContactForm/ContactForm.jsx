@@ -1,7 +1,5 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-hot-toast';
-import * as yup from 'yup';
-import { nanoid } from 'nanoid';
+import { useState } from 'react';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { contactsOperations } from 'redux/contacts';
@@ -9,69 +7,73 @@ import { contactsOperations } from 'redux/contacts';
 import { getContacts } from 'redux/contacts/contacts-selectors';
 import css from './ContactForm.module.css';
 
-const schema = yup.object().shape({
-  name: yup.string().required('Please, enter the name!'),
-  number: yup.number().required('Please, enter the number!').integer(),
-});
-
-const initialValues = {
-  name: '',
-  number: '',
-};
-
 export const ContactForm = () => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
 
-  const onSubmit = ({ name, number }, { resetForm }) => {
-    const newContact = {
-      id: nanoid(),
-      name,
-      number,
-    };
+  const handleChange = e => {
+    const { name, value } = e.currentTarget;
+
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+
+      case 'number':
+        setNumber(value);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const onSubmit = e => {
+    e.preventDefault();
 
     const checkUser = contacts.find(
-      contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
+      contact => contact.name.toLowerCase() === name.toLowerCase()
     );
 
-    checkUser
-      ? toast.error('Такий контакт вже існує!')
-      : dispatch(contactsOperations.addContact(newContact)) && resetForm();
-    // toast.success('Ваш контакт додано успішно!');
+    if (checkUser) {
+      return toast.error('Такий контакт вже існує!');
+    } else dispatch(contactsOperations.addContact(name, number));
+    toast.success('Ваш контакт додано успішно!');
+    setName('');
+    setNumber('');
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={schema}
-      onSubmit={onSubmit}
-    >
-      <Form autoComplete="off" className={css.contact__form}>
-        <label className={css.label}>Name</label>
-        <Field
-          type="text"
-          name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          className={css.contacts__input}
-        />
-        <ErrorMessage component="div" name="name" />
-        <label className={css.label}>Number</label>
-        <Field
-          type="tel"
-          name="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          className={css.contacts__input}
-        />
-        <ErrorMessage component="div" name="number" />
+    <form autoComplete="off" className={css.contact__form} onSubmit={onSubmit}>
+      <label className={css.label}>Name</label>
+      <input
+        type="text"
+        name="name"
+        value={name}
+        onChange={handleChange}
+        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        required
+        className={css.contacts__input}
+      />
 
-        <button type="submit" className={css.button__submit}>
-          Add contact
-        </button>
-      </Form>
-    </Formik>
+      <label className={css.label}>Number</label>
+      <input
+        type="tel"
+        name="number"
+        value={number}
+        onChange={handleChange}
+        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+        required
+        className={css.contacts__input}
+      />
+
+      <button type="submit" className={css.button__submit}>
+        Add contact
+      </button>
+    </form>
   );
 };

@@ -6,7 +6,6 @@ import { authSelectors } from '../../redux/auth';
 import css from './Navigation.module.css';
 
 const Navigation = () => {
-  //   const { isLoggedIn } = useAuth();
   const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
   return (
     <nav className={css.nav}>

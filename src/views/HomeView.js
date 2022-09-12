@@ -11,5 +11,3 @@ export default function HomeView() {
     </div>
   );
 }
-
-// export default HomeView;

@@ -10,7 +10,7 @@ export default function AuthNav() {
       <Link to="/register" className={css.link}>
         Sign up
       </Link>
-      <img src={avatarUser} alt="" width="26" />
+      <img src={avatarUser} alt="" width="26" className={css.img} />
       <Link to="/login" className={css.link}>
         Login in
       </Link>

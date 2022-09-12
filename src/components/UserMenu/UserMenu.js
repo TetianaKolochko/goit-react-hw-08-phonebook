@@ -13,7 +13,7 @@ export default function UserMenu() {
     <div className={css.container}>
       <img src={avatar} alt="" width="32" />
       <span className={css.name}>Welcome, {name}</span>
-      <button type="button" onClick={() => dispatch(authOperations.logOut())}>
+      <button type="button" onClick={() => dispatch(authOperations.logOut())} className={css.button}>
         Log out
       </button>
     </div>
