@@ -5,7 +5,7 @@
   margin-right: auto;
   margin-left: auto;
   text-align: center;
-  background-color: white;
+  background-color: rgb(245, 239, 206);
   box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
   border-radius: 6px;
   overflow: hidden;
@@ -46,4 +46,7 @@
 .button:hover,
 .button:focus {
   background-color: dimgrey;
+}
+.text {
+  color: rgb(96, 95, 95);
 }

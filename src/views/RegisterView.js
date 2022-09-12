@@ -33,7 +33,7 @@ export default function RegisterView() {
 
   return (
     <div className={css.registration}>
-      <h1>Sing up</h1>
+      <h1 className={css.text}>Create your account</h1>
       <form
         onSubmit={handleSubmit}
         autoComplete="off"

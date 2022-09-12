@@ -18,10 +18,10 @@ export default function PhonebookView() {
 
   return (
     <div className={css.container__box}>
-      <h1>Phonebook</h1>
+      <h1 className={css.text}>Phonebook</h1>
       <ContactForm />
 
-      <h2>Contacts</h2>
+      <h2 className={css.text}>Contacts</h2>
       <Filter />
       <ContactList />
       <Toaster />

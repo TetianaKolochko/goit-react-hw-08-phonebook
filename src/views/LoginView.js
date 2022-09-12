@@ -28,7 +28,7 @@ export default function LoginView() {
 
   return (
     <div className={css.login}>
-      <h1>Log in</h1>
+      <h1 className={css.text}>Log in</h1>
 
       <form onSubmit={handleSubmit} autoComplete="off" className={css.form}>
         <label className={css.label}>
