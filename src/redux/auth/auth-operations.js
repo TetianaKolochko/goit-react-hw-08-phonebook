@@ -13,40 +13,33 @@ const token = {
   },
 };
 
-const register = createAsyncThunk(
-  'auth/register',
-  async (credentials, thunkAPI) => {
-    try {
-      const { data } = await axios.post('/users/singup', credentials);
-      token.set(data.token);
-      toast.success('You successfully signed up!');
-      return data;
-    } catch (error) {
-      toast.error('Sign up failed. Check your data!');
-      return thunkAPI.rejectWithValue();
-    }
-  }
-);
-
-const logIn = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
+const register = createAsyncThunk('auth/register', async credentials => {
   try {
-    const { data } = await axios.post('/users/login', credentials);
+    const { data } = await axios.post('/users/signup', credentials);
     token.set(data.token);
-    toast.success('You successfully logged in!');
+    toast.success('Registration is successful!');
     return data;
   } catch (error) {
-    toast.error('Log in failed. Please, sign up!');
-    return thunkAPI.rejectWithValue();
+    toast.error('Error of registration. Check your data!');
   }
 });
 
-const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+const logIn = createAsyncThunk('auth/login', async credentials => {
+  try {
+    const { data } = await axios.post('/users/login', credentials);
+    token.set(data.token);
+    toast.success('Log in is successful!');
+    return data;
+  } catch (error) {
+    toast.error('Erorr. Please, sign up!'); // TODO: Добавить обработку ошибки error.message
+  }
+});
+
+const logOut = createAsyncThunk('auth/logout', async () => {
   try {
     await axios.post('/users/logout');
     token.unset();
-  } catch (error) {
-    return thunkAPI.rejectWithValue();
-  }
+  } catch (error) {}
 });
 
 const fetchCurrentUser = createAsyncThunk(
@@ -64,9 +57,7 @@ const fetchCurrentUser = createAsyncThunk(
     try {
       const { data } = await axios.get('/users/current');
       return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(); // TODO: Добавить обработку ошибки error.message
-    }
+    } catch (error) {}
   }
 );
 
